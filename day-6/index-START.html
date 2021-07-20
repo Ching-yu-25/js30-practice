@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+  <script>
+    const endpoint =
+      'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+    /*
+    fetch
+    fetch 後方會接 then()，這是 Promise 的特性，資料取得後可在 then 裡面接收。return response.json(); 的資料則會傳到下一個 then()
+    */
+    let cities = [];
+    const suggestions = document.querySelector('.suggestions')
+    fetch(endpoint).then(blob => blob.json()).then(
+      data => {
+        // cities.push(...data); -- 解構完在push進去
+        cities = data;
+      }
+    );
+
+    function matchData(val) {
+      return cities.filter(place => {
+        let regex = new RegExp(val, 'gi'); //gi->搜尋全域不分大小寫
+        return place.city.match(regex) || place.state.match(regex);
+      })
+    }
+
+    function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    function searchCity() {
+      let matchArray = matchData(this.value);
+
+      let html = matchArray.map(data => {
+        const regex = new RegExp(this.value, 'gi');
+        const cityName = data.city.replace(regex, `<span class="hl">${this.value}</span>`);
+        const stateName = data.state.replace(regex, `<span class="hl">${this.value}</span>`);
+        return `
+      <li>
+        <span class="name">${cityName}, ${stateName}</span>
+        <span class="population">${numberWithCommas(data.population)}</span>
+      </li>
+    `;
+      }).join('');
+      suggestions.innerHTML = html;
+    }
+    document.querySelector('.search').addEventListener('keyup', searchCity);
+  </script>
+</body>
+
+</html>
