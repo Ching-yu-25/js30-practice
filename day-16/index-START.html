@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>🔥WOAH!</h1>
+  </div>
+
+  <style>
+    html {
+      color: black;
+      font-family: sans-serif;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: black;
+    }
+
+    h1 {
+      text-shadow: 10px 10px 0 rgba(0, 0, 0, 1);
+      font-size: 100px;
+    }
+  </style>
+
+  <script>
+    (function () {
+      const hero = document.querySelector(".hero");
+      const h1 = document.querySelector("h1");
+
+      function mouseShow(e) {
+        const imgX = h1.offsetWidth / 2 + h1.offsetLeft;
+        const imgY = h1.offsetHeight / 2 + h1.offsetTop;
+        h1.style.textShadow = `
+        ${e.clientX-imgX}px ${e.clientY-imgY}px 0 rgba(255, 255, 0, 0.5),
+        ${-e.clientX+imgX}px ${-e.clientY+imgY}px 0 rgba(0, 255, 255, 0.5),
+        ${e.clientY-imgY}px ${e.clientX-imgX}px 0 rgba(255, 0, 255, 0.5),
+        ${-e.clientY+imgY}px ${-e.clientX+imgX}px 0 rgba(0,255 , 125, 0.5)`;
+      }
+      hero.addEventListener('mousemove', mouseShow);
+    })()
+
+    /*
+    this 總是會拿到被監聽的對象本身，也就是 element.addEventListener(<eventHandler>) 的 element。
+e.target 則是指事件被觸發時的對象，有可能不是 element 本身。
+    */
+  </script>
+</body>
+
+</html>
