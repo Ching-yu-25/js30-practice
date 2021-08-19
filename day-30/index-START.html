@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Whack A Mole!</title>
+  <link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <h1>Whack-a-mole! <span class="score">0</span></h1>
+  <button id="startBtn">Start!</button>
+
+  <div class="game">
+    <div class="hole hole1">
+      <div class="mole"></div>
+    </div>
+    <div class="hole hole2">
+      <div class="mole"></div>
+    </div>
+    <div class="hole hole3">
+      <div class="mole"></div>
+    </div>
+    <div class="hole hole4">
+      <div class="mole"></div>
+    </div>
+    <div class="hole hole5">
+      <div class="mole"></div>
+    </div>
+    <div class="hole hole6">
+      <div class="mole"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const holes = [...document.querySelectorAll('.hole')]; //洞口
+      const scoreBoard = document.querySelector('.score'); //分數欄
+      const moles = document.querySelectorAll('.mole'); //地鼠
+      const startBtn = document.querySelector('#startBtn');
+      let score = 0,
+        gameTime = 0; //分數計算
+      let gameTimer = null,
+        moleTimer = null,
+        nowMole = null;
+
+      //點擊開始遊戲
+      function startGame() {
+        //分數歸零
+        score = 0;
+        startBtn.disabled = true;
+
+        //計時開始
+        gameTimer = setInterval(() => {
+          if (gameTime >= 10) {
+            clearInterval(gameTimer); //時間到清除所有計時器
+            clearTimeout(moleTimer);
+            gameTime = 0; //遊戲全秒數歸零
+            //鎖按鈕
+            startBtn.disabled = false;
+          } else {
+            gameTime++;
+          }
+        }, 1000); //計時遊戲10秒
+
+        //啟動地鼠
+        moleStart();
+      }
+
+      //啟動地鼠
+      function moleStart() {
+
+        //亂數選洞
+        nowMole = parseInt(Math.random() * 6);
+
+        //出現 addclass
+        holes[nowMole].classList.add('up');
+
+        //出現時長
+        moleTimer = setTimeout(() => {
+          holes[nowMole].classList.remove('up');
+          moleStart();
+        }, (parseInt(Math.random() * 10) + 1) * 300);
+
+      }
+
+      //打到地鼠
+      function hitMoles() {
+        //分數增加
+        scoreBoard.innerHTML = ++score;
+        //分數增加後->隱藏地鼠(移除up)
+        holes[nowMole].classList.remove('up');
+        // console.log(score, 'hit!')
+      }
+
+      startBtn.addEventListener('click', startGame);
+      moles.forEach(mole => mole.addEventListener('click', hitMoles));
+    })()
+  </script>
+</body>
+
+</html>
