@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - 表單輸入綁定</title>
+  <style>
+    .red {
+      color: red;
+    }
+
+    .active {
+      background-color: lightgreen;
+    }
+
+    .font-bold {
+      font-weight: bold
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 雙向綁定 -->
+    <input type="text" v-model="txt">
+    <p>輸入內容為:{{txt}}</p>
+    <!-- 複選框 -->
+    <input type="checkbox" name="" id="checkbox" v-model="checked">
+    <label for="checkbox">{{checked}}</label>
+
+    <ul>
+      <!-- 記得屬性要用變數要bind -->
+      <li v-for="item in itemList">
+        <input type="checkbox" :id="item.name" v-model="item.check">
+        <label :for="item.name">{{item.name}}</label>
+      </li>
+    </ul>
+    <hr>
+    <select name="" id="" v-model="selectItem" multiple>
+      <option value="" disabled>請選擇</option>
+      <option value="A">A</option>
+      <option value="B">B</option>
+      <option value="C">C</option>
+    </select>
+    <p>select:{{selectItem}}</p>
+    <hr>
+    <!-- 值綁定 -->
+    <input type="radio" name="picks" id="radio1" v-model="picked" value="a">
+    <label for="radio1">radio1</label>
+    <input type="radio" name="picks" id="radio2" v-model="picked" value="b">
+    <label for="radio2">radio2</label>
+    <br>
+    <!-- 複選框//checked2 = yes -->
+    <input type="checkbox" v-model="checked2" true-value="yes" false-value="no">
+    <label for="">check it</label>
+    <br>
+    <!-- 單選框★ -->
+    <input type="radio" id="radio3" name="radio" v-model="picked" :value='radio3'>
+    <label for="radio3">radio3</label>
+    <br>
+    <!-- 複選框★ -->
+    <select v-model="selected">
+      <option :value="{ number:123 }">123</option>
+    </select>
+    <p>{{selected}}</p>
+    <hr>
+    <!-- 修飾符 .lazy→原先是輸入會同步更新，lazy後變成change後才觸發 -->
+    <input type="text" v-model.lazy="lazyText">
+    <p>輸入內容:{{lazyText}}</p>
+    <!-- 修飾符 .number→將值轉為數值類型(typeof vm.age = number) -->
+    <input type="text" v-model.number="age">
+    <p>年齡為:{{age}}</p>
+    <!-- 修飾符 .trim→移除值前後空白 -->
+    <input type="text" v-model.trim="address">
+    <p>地址為:{{address}}</p>
+  </div>
+  <!-- 
+    v-model 在内部为不同的输入元素使用不同的 property 并抛出不同的事件：
+    ※text 和 textarea 元素使用 value property 和 input 事件；
+    ※checkbox 和 radio 使用 checked property 和 change 事件；
+    ※select 字段将 value 作为 prop 并将 change 作为事件。
+
+    ※在文本区域插值 (<textarea>{{text}}</textarea>) 并不会生效，应用 v-model 来代替。
+  -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        txt: '',
+        checked: true,
+        checked2: true,
+        itemList: [{
+          'check': false,
+          'name': 'item1'
+        }, {
+          'check': false,
+          'name': 'item2'
+        }, {
+          'check': false,
+          'name': 'item3'
+        }],
+        selectItem: [],
+        picked: 'a',
+        radio3: 'a',
+        selected: {},
+        lazyText: '',
+        age: 0,
+        address: '',
+      },
+      methods: {
+
+      },
+      computed: {},
+      watch: {},
+    });
+  </script>
+
+</body>
+
+</html>

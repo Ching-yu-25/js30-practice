@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - 列表渲染</title>
+  <style>
+    .red {
+      color: red;
+    }
+
+    .active {
+      background-color: lightgreen;
+    }
+
+    .font-bold {
+      font-weight: bold
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <ul>
+      <li v-for="item in items">{{item.id}}.{{item.text}}</li>
+    </ul>
+    <hr>
+    <!-- in可以改成of -->
+    <ul>
+      <li v-for="(item,index) of items">{{index}}.{{item.text}}</li>
+    </ul>
+    <hr>
+    <!-- v-for可以遍歷物件 -->
+    <ul>
+      <li v-for="item of shop">{{item}}</li>
+    </ul>
+    <ul>
+      <li v-for="(item,key,index) of shop">{{index}}-{{key}}:{{item}}</li>
+    </ul>
+    <!-- 
+      更新data順序時，v-for渲染的列表不會更動數據順序，僅更新每個元素
+     -->
+    <hr>
+    <!-- 若要更新位置需要提供給每個元素key屬性 -->
+    <ul>
+      <li v-for="(item,index) of items" :key="item.id">{{index}}-----{{item.text}}</li>
+    </ul>
+    <hr>
+    <div>
+      <span v-for="num in numbersHandler">{{num}}</span>
+    </div>
+    <!-- 巢狀迴圈 -->
+    <ul v-for="nums in numberLists">
+      <li v-for="n in numbersHandler2(nums)">{{n}}</li>
+    </ul>
+    <hr>
+    <template v-for="n in 3">
+      <div>
+        <p>第{{n}}組</p>
+        <p>Lorem ipsum dolor sit amet consectetur.</p>
+      </div>
+    </template>
+  </div>
+  <!-- 
+    Vue 将被侦听的数组的变更方法进行了包裹，所以它们也将会触发视图更新。这些被包裹过的方法包括：
+    push().pop().shift().unshift().splice().sort().reverse()
+
+    filter()、concat() 和 slice()→它们不会变更原始数组，而总是返回一个新数组
+    -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        items: [{
+            id: 1,
+            text: '蛋糕'
+          },
+          {
+            id: 2,
+            text: '餅乾'
+          },
+          {
+            id: 3,
+            text: '布蕾'
+          },
+          {
+            id: 4,
+            text: '布丁'
+          },
+          {
+            id: 5,
+            text: '鹹派'
+          },
+        ],
+        shop: {
+          name: '噗噗咖啡',
+          address: '桃園市開心路快樂街00號00樓',
+          tel: '03-4600000',
+        },
+        numbers: [0, 1, 2, 3, 4, 5, 6, 7],
+        numberLists: [
+          [0, 1, 2, 3, 4, 5],
+          [6, 7, 8, 9, 10]
+        ],
+      },
+      methods: {
+        numbersHandler2(nums) {
+          return nums.filter(function (number) {
+            return number % 2 == 0;
+          });
+        }
+      },
+      computed: {
+        numbersHandler() {
+          return this.numbers.filter(function (number) {
+            return number % 2 == 0;
+          });
+        }
+      },
+      watch: {},
+    });
+  </script>
+
+</body>
+
+</html>

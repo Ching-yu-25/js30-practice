@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - bind、if else、for</title>
+
+  <style>
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity .5s;
+    }
+
+    .fade-enter,
+    .fade-leave-to
+
+    /* .fade-leave-active below version 2.1.8 */
+      {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <span :title="msg">
+      hover 顯示
+    </span>
+  </div>
+  <!-- 
+    v-bind → :
+   -->
+
+  <div id="app2">
+    <transition name="fade">
+      <p v-if="seen">watch out!</p>
+    </transition>
+
+    <button type="button" @click="seen = !seen">click</button>
+  </div>
+  <!-- 
+    要做動畫效果(ex:淡入淡出)包在transition，name→找相對應css:fade
+    按鈕click觸發變數
+   -->
+
+  <div id="app3">
+    <!-- 陣列 -->
+    <ol>
+      <li v-for="todo in todothings">{{todo}}</li>
+    </ol>
+    <!-- 物件 -->
+    <ul>
+      <li v-for="singer in singers">| {{singer.team}} | {{singer.name}}</li>
+    </ul>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        msg: `現在時間是 ${new Date().toLocaleString()}`,
+      }
+    });
+
+    var app2 = new Vue({
+      el: '#app2',
+      data: {
+        seen: true, //控制畫面可否看見，位置會被註解
+      }
+    });
+
+    var app3 = new Vue({
+      el: '#app3',
+      data: {
+        todothings: ['1st thing', '2nd thing', '3rd thing'],
+        singers: [{
+          name: 'Tsukasa',
+          team: 'Knights'
+        }, {
+          name: 'Arashi',
+          team: 'Knights'
+        }, {
+          name: 'Leo',
+          team: 'Knights'
+        }, {
+          name: 'Izumi',
+          team: 'Knights'
+        }, {
+          name: 'Ritsu',
+          team: 'Knights'
+        }]
+      },
+    });
+  </script>
+
+</body>
+
+</html>

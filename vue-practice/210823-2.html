@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - on、model</title>
+</head>
+
+<body>
+  <div id="app">
+    <p>{{total}}</p>
+    <button type="button" @click="addone">click</button>
+  </div>
+  <!-- 
+    v-on→添加事件偵聽器，通過他調用實例中定義的方法
+   -->
+
+  <div id="app2">
+    <p>{{msg}}</p>
+    <input type="text" v-model="msg">
+  </div>
+  <!-- 
+    v-model → 雙向綁定
+   -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        total: 0,
+      },
+      methods: {
+        addone() {
+          return this.total++;
+        },
+      }
+    });
+    var app2 = new Vue({
+      el: '#app2',
+      data: {
+        msg: '訊息同步',
+      },
+    });
+  </script>
+
+</body>
+
+</html>

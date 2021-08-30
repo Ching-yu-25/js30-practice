@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - component</title>
+</head>
+
+<body>
+  <div id="app">
+    <ol>
+      <todo-item v-for="todo in todos" :item="todo.text" :key="todo.id"></todo-item>
+    </ol>
+  </div>
+
+  <!-- 
+    :item="todo.text"→這裡:item對應組件props:["item"]
+    <todo-item>組件的數量由父層todos的長度生成，跑迴圈將陣列中每個值丟到組件顯示(<li>{{item}}</li>)
+   -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    // 定義一個新組件
+    Vue.component('todo-item', {
+      template: '<li>{{item}}</li>',
+      props: ['item'],
+    });
+    var app = new Vue({
+      el: '#app',
+      data: {
+        todos: [{
+          id: 1,
+          text: '1st'
+        }, {
+          id: 2,
+          text: '2nd'
+        }, {
+          id: 3,
+          text: '3rd'
+        }],
+      },
+    });
+  </script>
+
+</body>
+
+</html>

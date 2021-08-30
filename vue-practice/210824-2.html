@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - 計算屬性與偵聽器</title>
+  <style>
+    .red {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <p>原內容:{{msg}}</p>
+    <p>computed反轉後內容:{{strReverse}}</p>
+    <p>method反轉後內容:{{strReverse2()}}</p>
+    <hr>
+    <p>My name is {{fullname}}</p>
+    <input type="text" v-model:value="firstname" placeholder="firstname">
+    <input type="text" v-model:value="lastname" placeholder="lastname">
+    <hr>
+  </div>
+  <!--
+
+  -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        msg: 'Have a nice day!',
+        firstname: 'Harry',
+        lastname: 'Poter',
+      },
+      methods: {
+        strReverse2() {
+          return this.msg.split('').reverse().join('');
+        },
+      },
+      computed: {
+        // 複雜的計算邏輯都應該使用計算屬性
+        strReverse() {
+          return this.msg.split('').reverse().join('');
+        },
+        fullname: {
+          get() {
+            return this.firstname + ' ' + this.lastname;
+          },
+          set(newValue) {
+            let names = newValue.split(' ');
+            this.firstname = names[0];
+            this.lastname = names[names.length - 1];
+          },
+        }
+      },
+      watch: {
+        //偵聽
+      },
+    });
+    /*
+    ※计算属性是基于它们的响应式依赖进行缓存的
+    computed:get/set
+    */
+  </script>
+
+</body>
+
+</html>

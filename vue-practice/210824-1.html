@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - 模板語法</title>
+  <style>
+    .red {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <span v-once>{{msg}}</span>
+    <hr>
+    <p>這個是{{sentence}}</p>
+    <p>這個是<span v-html="sentence"></span></p>
+    <hr>
+    <!-- 調用屬性用bind -->
+    <button type="button" :disabled="isDisabled">我是按鈕</button>
+    <div v-for="num in blockNums" :id="'block'+num">block{{num}}</div>
+    <!-- 動態參數↓注意 -->
+    <a :[key]="url">test</a>
+    <hr>
+    <!-- 修飾符 -->
+    <a href="#" @click.prevent="onClick">prevent test</a>
+    <hr>
+
+  </div>
+  <!-- 
+  v-once:值會被更新，但畫面不會重新渲染
+  v-html:放html 結構
+  html標籤屬性不能放雙大括弧{{}}，要取用變數要透過v-bind
+  -
+
+  -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        msg: '畫面不變!',
+        sentence: '<span class="red">紅色</span>',
+        isDisabled: true,
+        blockNums: [1, 2, 3, 4, 5],
+        key: 'href',
+        url: 'https://google.com',
+      },
+      methods: {
+        onClick() {
+          console.log('prevent ok')
+        }
+      },
+    });
+  </script>
+
+</body>
+
+</html>

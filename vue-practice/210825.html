@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - class and style</title>
+  <style>
+    .red {
+      color: red;
+    }
+
+    .active {
+      background-color: lightgreen;
+    }
+
+    .font-bold {
+      font-weight: bold
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <p :class="{'active':isActive}">Test</p>
+    <hr>
+    <p :class="classObject">hey hey</p>
+    <hr>
+    <p :class="classObject2">hey hey</p>
+    <hr>
+    <p :class="[activeClass,fontbClass]">hey hey</p>
+    <p :class="[isActive?activeClass:'']">hey hey</p>
+    <hr>
+    <my-component class="red"></my-component>
+    <!-- 渲染為class="font-bold red" -->
+    <hr>
+    <!-- 內聯樣式 -->
+    <div :style="{color:greenColor, fontSize:fontsize+'px'}">{}內用駝峰式或短橫線相隔</div>
+    <div :style="styleObject">這種方式更好 模板較乾淨</div>
+    <div :style="[styleObject,styleObject2]">數組的方式可以多個</div>
+  </div>
+  <!--
+
+  -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    Vue.component('my-component', {
+      template: '<div class="font-bold">component</div>',
+    });
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        isActive: false,
+        isBold: false,
+        classObject: {
+          active: true,
+          'red': false,
+        },
+        activeClass: 'active',
+        fontbClass: 'font-bold',
+        greenColor: 'green',
+        fontsize: 20,
+        styleObject: {
+          'font-weight': 'bold',
+          'color': 'orange',
+        },
+        styleObject2: {
+          'background-color': 'lightblue',
+          'font-style': 'italic',
+          'color': 'white',
+        }
+      },
+      methods: {
+
+      },
+      computed: {
+        classObject2() {
+          return {
+            'font-bold': this.isBold,
+            'active': this.isActive,
+          }
+        },
+      },
+      watch: {},
+    });
+  </script>
+
+</body>
+
+</html>

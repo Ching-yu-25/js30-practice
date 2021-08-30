@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - 條件渲染</title>
+  <style>
+    .red {
+      color: red;
+    }
+
+    .active {
+      background-color: lightgreen;
+    }
+
+    .font-bold {
+      font-weight: bold
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <p v-if="see">看不到</p>
+    <p v-else>看的到</p>
+    <hr>
+    <template v-if="see">
+      <h1>大標題</h1>
+      <p>內容</p>
+    </template>
+    <div v-if="see">
+      <span>測試</span>
+      <p>測試2</p>
+    </div>
+    <hr>
+    <div v-if="active==='A'">A區</div>
+    <div v-else-if="active==='B'">B區</div>
+    <div v-else>C區</div>
+    <hr>
+    <template v-if="area=='A'">
+      <p>第一區</p>
+      <input type="text" placeholder="this is area A" key="area-a">
+    </template>
+    <template v-else>
+      <p>第二區</p>
+      <input type="text" placeholder="this is area B" key="area-b">
+    </template>
+    <button type="button" @click="area=(area=='A')?'B':'A'">切換</button>
+    <!-- 
+      沒有加上key 不會重新渲染(两个模板使用了相同的元素，<input> 不会被替换掉——仅仅是替换了它的 placeholder)
+      添加唯一值的key即可
+     -->
+    <hr>
+    <p v-show="see">看不到</p>
+    <p>看得到</p>
+    <hr>
+  </div>
+  <!-- 
+    ※v-else 元素必须紧跟在带 v-if 或者 v-else-if 的元素的后面，否则它将不会被识别。
+    ※v-show 的元素始终会被渲染并保留在 DOM 中。v-show 只是简单地切换元素的 CSS property display。
+    ※v-show 不支持 <template> 元素，也不支持 v-else 
+    ※一般来说，v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。
+    ※不推荐同时使用 v-if 和 v-for。
+    -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    // Vue.component('new-component', {
+    //   template: '<p>組件v-if</p>',
+    // })
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        see: false,
+        active: "A",
+        area: 'A',
+      },
+      methods: {
+
+      },
+      computed: {
+
+      },
+      watch: {},
+    });
+  </script>
+
+</body>
+
+</html>
