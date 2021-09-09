@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>vue practice - todoList</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif, '微軟正黑體';
+      padding: 5%;
+      background: #a0e1c6;
+    }
+
+    h1 {
+      font-weight: bold;
+      font-size: 3.5rem;
+    }
+
+    .card {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .list-group-item {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .list-group-item::after {
+      content: '';
+      position: absolute;
+      width: 0px;
+      height: 1px;
+      background: black;
+      left: 16px;
+      top: calc(50% - 1px);
+      transition: width .5s;
+    }
+
+    .list-group-item.checked::after {
+      content: '';
+      position: absolute;
+      width: calc(100% - 60px);
+      transition: width .5s;
+    }
+
+    .list-group-item .checkbox {
+      border: 1px solid lightgray;
+      border-radius: .25rem;
+      padding: .25rem;
+      line-height: 1;
+      min-width: 25px;
+      min-height: 25px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="text-center">代辦事項</h1>
+  <div id="app" class="card">
+    <div class="card-body">
+      <section class="input-area">
+        <div class="input-group">
+          <input type="text" v-model.trim="val" class="form-control" placeholder="請輸入代辦事項" @keyup.enter="addItem">
+          <button type="button" class="btn btn-success" @click="addItem">送出</button>
+        </div>
+      </section>
+      <hr>
+      <section class="list-area">
+        <div v-if="list.length>=1">
+          <ol class="list-group  list-group-numbered">
+            <list-item v-for="item in list" :item="item" :id="'item'+item.id"></list-item>
+          </ol>
+          <div class="text-center mt-3">
+            <button type="button" class="btn btn-danger" @click="list=[]">全部清除</button>
+          </div>
+
+        </div>
+        <div class="text-center text-secondary" v-else>
+          <p>目前沒有任何代辦事項!</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+  <script>
+    Vue.component('list-item', {
+      template: `<li :class="['list-group-item',{'checked':item.checked}]" @click="item.checked = !item.checked">
+        <div>{{item.txt}}</div>
+        <div class="checkbox"><i class="fas fa-check text-success" v-show="item.checked"></i></div>
+        <input type="checkbox" class="d-none" :checked="item.checked" >
+        </li>`,
+      props: ['item'],
+      methods: {}
+    })
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        list: [], //代辦資料
+        val: '',
+      },
+      methods: {
+        // 將輸入的事項像放進資料
+        addItem(e) {
+          e.preventDefault();
+          if (this.val == '') return;
+          let newItem = {};
+          let length = this.list.length;
+          newItem.id = length > 0 ? length++ : 1;
+          newItem.txt = this.val;
+          newItem.checked = false;
+          this.list.push(newItem)
+          this.val = '';
+        },
+      },
+      computed: {},
+      watch: {},
+    });
+  </script>
+
+</body>
+
+</html>

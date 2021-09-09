@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - prop</title>
+  <style>
+
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 
+      prop變數命名
+      html→count-times|js→countTimes
+     -->
+    <custom-btn :count-times="count" @count-times="count++"></custom-btn>
+    <!-- prop類型 -->
+    <custom-alert></custom-alert>
+    <!-- 傳遞靜態動態prop -->
+    <!-- 靜態 -->
+    <component-a info="Have a nice day!"></component-a>
+    <!-- 動態 -->
+    <component-b :say-something="call"></component-b>
+    <!-- 
+      prop→父傳子
+      單向數據流
+
+      不希望组件的根元素继承 attribute，你可以在组件的选项中设置 inheritAttrs: false
+    -->
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    Vue.component('custom-btn', {
+      template: `<button type="button" @click="$emit('count-times')">click {{countTimes}} times</button>`,
+      props: ['countTimes'],
+    });
+
+    Vue.component('custom-alert', {
+      template: `<div></div>`,
+      props: {
+        msg: String,
+        status: Boolean
+      },
+    });
+    Vue.component('component-a', {
+      template: `<div>{{info}}</div>`,
+      props: ['info'],
+    });
+    Vue.component('component-b', {
+      template: `<div>{{saySomething}}</div>`,
+      props: ['saySomething'],
+    });
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        count: 0,
+        call: 'Say HO~',
+      },
+      methods: {},
+      computed: {},
+      watch: {},
+    });
+  </script>
+
+</body>
+
+</html>

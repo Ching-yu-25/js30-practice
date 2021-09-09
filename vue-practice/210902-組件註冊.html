@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - 組件註冊</title>
+  <style>
+    .alert {
+      border-radius: .5rem;
+      margin: .5rem;
+      padding: .75rem 1.5rem;
+    }
+
+    .bg-danger {
+      border: 3px solid red;
+      background-color: #ffcbd3;
+    }
+
+    .bg-success {
+      border: 3px solid green;
+      background-color: #dcf6db;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 
+      /*組件命名*/
+      custom-button或是CustomButton
+     -->
+    <!-- 全局註冊 -->
+    <custom-alert></custom-alert>
+    <!-- 局部註冊 -->
+    <part-alert></part-alert>
+    <!-- 
+      按鈕、輸入框等等頻繁使用→會稱之為基礎組件
+      可以利用require.context 只全局注册这些非常通用的基础组件
+      https://cn.vuejs.org/v2/guide/components-registration.html#%E5%B1%80%E9%83%A8%E6%B3%A8%E5%86%8C
+      後半段待看
+     -->
+  </div>
+  <!-- 
+    !全局注册所有的组件意味着即便你已经不再使用一个组件了，它仍然会被包含在你最终的构建结果中。这造成了用户下载的 JavaScript 的无谓的增加。
+    !局部注册的组件在其子组件中不可用
+  -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    // 全局註冊
+    Vue.component('custom-alert', {
+      template: `<div class="alert bg-danger">Error!</div>`,
+    });
+    var componentAlert = {
+      template: `<div class="alert bg-success">Success!</div>`,
+    }
+    var vm = new Vue({
+      el: '#app',
+      data: {},
+      components: {
+        // 局部註冊
+        'part-alert': componentAlert,
+      },
+      methods: {},
+      computed: {},
+      watch: {},
+    });
+
+    /*
+    import ComponentC from './ComponentC'
+    export default {
+      components: {
+      ComponentA,
+      ComponentC
+    },
+}
+    */
+  </script>
+
+</body>
+
+</html>

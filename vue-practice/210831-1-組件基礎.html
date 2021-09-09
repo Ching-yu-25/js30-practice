@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue practice - 組件基礎</title>
+  <style>
+    .active {
+      color: red;
+    }
+
+    .success-box {
+      border: 2px solid green;
+      background-color: #cef6ce;
+      border-radius: 1rem;
+      padding: .5rem 1rem;
+    }
+
+    .success-box span {
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <btn-counter></btn-counter>
+    <txt-part call="UNDEAD"></txt-part>
+    <ul>
+      <newdi-team v-for="team in teams" :id="team.id" :title="team.name"></newdi-team>
+    </ul>
+    <hr>
+    <!-- 自定義事件 -->
+    <ul>
+      <starpro-team v-for="star in stars" :id="star.id" :info="star" :class="{'active':active}"
+        @choose-this="active=!active">
+      </starpro-team>
+    </ul>
+    <hr>
+    <ul>
+      <starpro-team2 v-for="star in stars" :info="star" :fans="starfans" @fans-count="countNum"></starpro-team2>
+    </ul>
+    <hr>
+    <!-- v-model -->
+    <input-component :value="inputTxt" @input="inputTxt=$event"></input-component>
+    <p>{{inputTxt}}</p>
+    <hr>
+    <!-- slot插槽 -->
+    <custom-alert>You did it!</custom-alert>
+  </div>
+  <!-- 
+    因为组件是可复用的 Vue 实例，所以它们与 new Vue 接收相同的选项，例如 data、computed、watch、methods 以及生命周期钩子等。仅有的例外是像 el 这样根实例特有的选项。
+    組件的data必須是一個函式
+    vue組件分為全局註冊&局部註冊
+    prop→父傳子
+    emit→子傳父
+  -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    Vue.component('btn-counter', {
+      data() {
+        return {
+          count: 0,
+        }
+      },
+      template: '<button type="button" @click="{count++;}">click {{count}} times</button>',
+    });
+    Vue.component('txt-part', {
+      template: '<p>We are {{call}}</p>',
+      props: ['call'],
+    });
+    Vue.component('newdi-team', {
+      template: '<li>{{title}}</li>',
+      props: ['title'],
+    });
+    Vue.component('starpro-team', {
+      template: `<li>
+        <h4>{{info.name}}</h4>
+        <div>{{info.memcount}} 人 <button type="button" @click="$emit('choose-this')">choose</button></div>
+      </li>`,
+      props: ['info'],
+    });
+    Vue.component('starpro-team2', {
+      template: `<li>
+        <h4>{{info.name}}</h4>
+        <div>fans: {{fans}}人 <button type="button" @click="$emit('fans-count',1)">fan +1</button></div>
+      </li>`,
+      props: ['info', 'fans'],
+    });
+    Vue.component('input-component', {
+      template: `<input type="text" :value="value" @input="$emit('input',$event.target.value)">`,
+      props: ['value'],
+    });
+    /*
+    利用自定義事件(choose-this)告知父層更新
+    */
+    Vue.component('custom-alert', {
+      template: `<div class="success-box">
+      <span>Congratulation!<span>
+        <slot></slot>
+      <div>`,
+    });
+
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        active: false,
+        teams: [{
+          id: 1,
+          name: 'Knights'
+        }, {
+          id: 2,
+          name: 'Switch'
+        }, {
+          id: 3,
+          name: 'Double Face'
+        }],
+        stars: [{
+          id: 1,
+          name: 'Ruseitai',
+          memcount: 5,
+        }, {
+          id: 2,
+          name: 'fine',
+          memcount: 4,
+        }, {
+          id: 3,
+          name: 'trickstar',
+          memcount: 4,
+        }, {
+          id: 4,
+          name: 'alkaloid',
+          memcount: 4,
+        }, ],
+        starfans: 0,
+        inputTxt: '',
+      },
+      methods: {
+        countNum(num) {
+          this.starfans += num;
+        }
+      },
+      computed: {
+
+      },
+      watch: {},
+    });
+  </script>
+
+</body>
+
+</html>

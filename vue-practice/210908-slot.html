@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>vue practice - 插槽</title>
+  <style>
+    .kn {
+      color: darkblue;
+      font-weight: bold;
+    }
+
+    .sw {
+      color: greenyellow;
+      font-weight: bold;
+    }
+
+    .df {
+      color: #42705f;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <h4>插槽</h4>
+    <custom-a>Ensemble stars!!</custom-a>
+    <!-- <custom-b><i class="fas fa-star"></i></custom-b> -->
+    <custom-b>
+      <custom-a></custom-a>
+    </custom-b>
+    <hr>
+    <!-- 作用域 -->
+    <h4>作用域</h4>
+    <custom-c>
+      {{colorPur}}
+    </custom-c>
+    <!-- <custom-d url="/profile">
+      Clicking here will send you to: {{ url }}
+    </custom-d> -->
+    <hr>
+    <!-- slot預設內容:若組件內無內容則會顯示slot裡的預設內容 -->
+    <h4>預設內容</h4>
+    <custom-e>
+      2 thouands later
+    </custom-e>
+    <hr>
+    <!-- 具名插槽:利用屬性name&v-slot -->
+    <!-- 
+      v-slot 只能添加在 <template> 上 (只有一种例外情况)
+     -->
+    <h4>具名插槽</h4>
+    <custom-team>
+      newDimension
+      <template v-slot:kn>
+        <p>Slient Oath</p>
+      </template>
+      <template v-slot:sw>
+        <p>knocking fantasy</p>
+      </template>
+      <template v-slot:df>
+        <p>Stippling</p>
+      </template>
+    </custom-team>
+    <hr>
+    <!-- 作用域插槽:父層欲取用子層變數 可以透過slot prop -->
+    <h4>作用域插槽</h4>
+    <custom-star>
+      <template v-slot:rusei="slotProps">
+        {{slotProps.user.lastname}}
+      </template>
+
+    </custom-star>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+  <script>
+    // slot必須放在模板標籤內
+    Vue.component('custom-a', {
+      template: `<p>Brand new stars <slot></slot></p>`,
+    })
+    // 可以放html(fontawesome).其他組件
+    Vue.component('custom-b', {
+      template: `<p style="color:red"><slot></slot> Ruseitai</p>`,
+    })
+    //作用域
+    Vue.component('custom-c', {
+      template: `<p>Meshiya colors: red. green. <slot></slot></p>`,
+    })
+    // Vue.component('custom-d', {
+    //   template: `<a
+    //       :href="url"
+    //       class="nav-link"
+    //     >
+    //       <slot></slot>
+    //     </a>`,
+    // }
+    /*
+    父级模板里的所有内容都是在父级作用域中编译的；子模板里的所有内容都是在子作用域中编译的。
+    template裡的變數屬子層
+    */
+    //slot預設內容
+    Vue.component('custom-e', {
+      template: `<button><slot>Please wait!</slot></button>`,
+    });
+    //具名插槽
+    Vue.component('custom-team', {
+      template: `
+      <div>
+        <slot></slot>
+        <div class="kn">
+          <slot name="kn"></slot>
+          </div>
+        <div class="sw">
+          <slot name="sw"></slot>
+          </div>
+        <div class="df">
+          <slot name="df"></slot></div>
+          </div>
+        </div>
+      `,
+    })
+    //作用域插槽
+    /*
+    子層插槽欲傳變數給父層 可在slot命名且bind 要傳的變數，父層透過v-slot連結對應的slot即可取用
+    */
+    Vue.component('custom-star', {
+      data() {
+        return {
+          user: {
+            firstname: 'morizawa',
+            lastname: 'chiaki'
+          },
+        }
+      },
+      template: `<div>Hello! <slot name="rusei" :user="user">{{user.firstname}}</slot> .</div>`,
+    })
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        colorRed: 'red',
+        colorGrn: 'green',
+        colorBl: 'blue',
+        colorYel: 'yellow',
+        colorPur: 'purple',
+        url: 'google.com.tw',
+      },
+      methods: {},
+      computed: {},
+      watch: {},
+    });
+  </script>
+
+</body>
+
+</html>
