@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue - </title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style scoped>
+    * {
+      /* border: 1px solid red; */
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif, "微軟正黑體";
+    }
+
+    a {
+      display: block;
+    }
+
+    .wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2.5%;
+    }
+
+    .small-pic ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .small-pic li {
+      width: 100px;
+      height: 100px;
+      border-radius: 1rem;
+      background-size: cover;
+      margin-bottom: 1.5rem;
+      opacity: .5;
+      transition: .5s all;
+      cursor: pointer;
+    }
+
+    .small-pic li:hover {
+      transform: scale(1.05);
+      opacity: 1;
+      transition: .5s all;
+    }
+
+    .info-wrapper>div {
+      overflow: hidden;
+      min-height: 80vh;
+      position: relative;
+    }
+
+    .info {
+      min-height: calc(100vh - 5% - 5rem - 50px);
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1rem;
+      position: absolute;
+      width: 100%;
+    }
+
+    .name {
+      font-size: 5rem;
+      font-weight: bolder;
+      font-style: italic;
+      position: relative;
+      margin-left: -1rem;
+    }
+
+    .name>span:first-child {
+      position: relative;
+      z-index: 2;
+      margin-left: 1rem;
+    }
+
+    .name>span:last-child {
+      position: absolute;
+      background: #353131;
+      width: 100%;
+      max-width: 360px;
+      height: 5rem;
+      top: 1rem;
+      left: -.5rem;
+      transform: skewX(-5deg);
+    }
+
+
+    .link-row {
+      display: flex;
+    }
+
+    .tw {
+      color: white;
+      background: rgb(39, 191, 252);
+      border-radius: 50px;
+      width: 40px;
+      height: 40px;
+      font-size: 1.5rem;
+      line-height: 40px;
+      text-align: center;
+      margin: .5rem;
+      transition: all .5s;
+    }
+
+    .tw:hover {
+      color: rgb(39, 191, 252);
+      background: white;
+      transition: all .5s;
+    }
+
+    .yt {
+      color: white;
+      background: red;
+      border-radius: 50px;
+      width: 40px;
+      height: 40px;
+      font-size: 1.5rem;
+      line-height: 40px;
+      text-align: center;
+      margin: .5rem;
+      transition: all .5s;
+    }
+
+    .yt:hover {
+      color: red;
+      background: white;
+      transition: all .5s;
+    }
+
+    .fade-enter {
+      opacity: 0;
+      left: -100%;
+    }
+
+    .fade-enter-active {
+      transition: opacity .5s, left .5s;
+    }
+
+    .fade-enter-to {
+      left: 0;
+      opacity: 1;
+    }
+
+    .fade-leave {
+      left: 0;
+      opacity: 1;
+    }
+
+    .fade-leave-active {
+      transition: opacity .3s, left .3s;
+    }
+
+    .fade-leave-to {
+      left: -100%;
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper" id="app">
+    <div class="row">
+      <!-- 小圖 -->
+      <div class="col-md-2 small-pic">
+        <ul>
+          <simple-info v-for="season in seasonData" :season="season" :key="season.id" @change-idx="nowIdx = season.id">
+          </simple-info>
+        </ul>
+      </div>
+      <!-- 大圖 -->
+      <div class="col-md-10 info-wrapper">
+        <transition-group tag="div" name="fade">
+          <more-info v-for="season in seasonData" :season="season" :key="season.id" v-show="nowIdx==season.id">
+            <template v-slot:twitter>
+              <i class="fab fa-twitter"></i>
+            </template>
+            <template v-slot:youtube>
+              <i class="fab fa-youtube"></i>
+            </template>
+          </more-info>
+        </transition-group>
+      </div>
+    </div>
+  </div>
+
+  <!-- 
+    当在组件上使用 v-for 时，key 现在是必须的
+
+    transition-group
+   -->
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script>
+  const seasons = [{
+    id: 1,
+    name: "Spring",
+    txt: "",
+    pic: "img/cherry-blossom-tree-1225186_1280.jpg",
+    tw: "#",
+    yt: "#",
+    maincolor: "#ffafe3",
+  }, {
+    id: 2,
+    name: "Summer",
+    txt: "",
+    pic: "img/beach-666122_1280.jpg",
+    tw: "#",
+    yt: "#",
+    maincolor: "#81c85c",
+  }, {
+    id: 3,
+    name: "Autumn",
+    txt: "",
+    pic: "img/road-1072821_1280.jpg",
+    tw: "#",
+    yt: "#",
+    maincolor: "#ff9930",
+  }, {
+    id: 4,
+    name: "Winter",
+    txt: "",
+    pic: "img/train-62849_1280.jpg",
+    tw: "#",
+    yt: "#",
+    maincolor: "#99d4eb",
+  }];
+  Vue.component('simple-info', {
+    template: `<li :style="[bgImg]" @click="$emit('change-idx')"></li>`,
+    props: ['season'],
+    data() {
+      return {
+        bgImg: {
+          'background-image': 'url(' + this.season.pic + ')',
+        },
+      }
+    },
+  });
+  Vue.component('more-info', {
+    template: `
+    <div class="info":style="[bgImg]" >
+          <div class="name" :style="{color:color}"><span>{{season.name}}</span><span></span></div>
+          <div class="txt">{{season.txt}}</div>
+          <div class="link-row">
+            <a :href="season.tw" class="tw"><slot name="twitter"></slot></a>
+            <a :href="season.yt" class="yt"><slot name="youtube"></slot></a>
+        </div>
+      </div>`,
+    props: ['season'],
+    data() {
+      return {
+        bgImg: {
+          'background-image': 'url(' + this.season.pic + ')',
+        },
+        color: this.season.maincolor,
+      }
+    },
+  });
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      seasonData: seasons,
+      nowIdx: 1,
+    },
+  });
+</script>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script>
+  /*實例*/
+  new Vue({
+    data: {
+      foo: 1
+    },
+    computed: {
+      bar: function () {
+        /* ... */
+      }
+    },
+    methods: {
+      baz: function () {
+        /* ... */
+      }
+    }
+  })
+
+
+  //訪問根實例
+  /*
+  $root → this.$root.foo
+  */
+
+  //訪問父級組件
+  /*
+  $parent -
+  提供了一种机会， 可以在后期随时触达父级组件， 以替代将数据以 prop 的方式传入子组件的方式
+  ※在绝大多数情况下， 触达父级组件会使得你的应用更难调试和理解， 尤其是当你变更了父级组件的数据的时候。 当我们稍后回看那个组件的时候， 很难找出那个变更是从哪里发起的。
+  */
+
+  //訪問子組件實例或子元素
+  /*
+  通过 ref 这个 attribute 为子组件赋予一个 ID 引用
+    <custom - a ref = "usernameInput"> </custom-a> → this.$refs.usernameInput
+    ※$refs 只会在组件渲染完成之后生效， 并且它们不是响应式的。 这仅作为一个用于直接操作子组件的“ 逃生舱”—— 你应该避免在模板或计算属性中访问 $refs
+  */
+  //依賴注入 -> 類似大範圍有效prop
+  /*
+  provide(父)-选项允许我们指定我们想要提供给后代组件的数据/方法
+  new Vue({
+    ...
+    provide:{
+      return{
+        getMap:this.getMap,
+      }
+    },
+  })
+  inject(子)-接收指定的我们想要添加在这个实例上的 property
+  Vue.component('text',{
+    ...
+    //inject:['getMap'],
+  })
+
+  */
+  // 程式化的事件偵聽器
+  /*
+  通过 $on(eventName, eventHandler) 侦听一个事件
+通过 $once(eventName, eventHandler) 一次性侦听一个事件
+通过 $off(eventName, eventHandler) 停止侦听一个事件
+  https://codesandbox.io/s/github/vuejs/vuejs.org/tree/master/src/v2/examples/vue-20-programmatic-event-listeners
+  */
+
+  //遞歸組件
+</script>
+
+</html>

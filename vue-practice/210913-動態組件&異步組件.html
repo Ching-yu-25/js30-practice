@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue -動態組件 &　異步組件</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .br-1 {
+      border-right: 1px solid gray;
+    }
+  </style>
+</head>
+<div id="app">
+  <!-- 動態組件 -->
+  <!-- is -->
+  <h4>動態組件- is</h4>
+  <div class="d-flex">
+    <button type="button" v-for="tab in tabs" class="btn btn-secondary mx-2" :key="tab"
+      @click="currentPart = tab">{{tab}}</button>
+  </div>
+  <component :is="componentBuild"></component>
+  <!-- 
+    <table><blog-post-row></blog-post-row></table>
+    <li>、<tr>等等只能出现在其它某些特定的元素内部，可以透過以下方式解決
+    <table><tr is="blog-post-row"></tr></table>
+   -->
+  <hr>
+  <!-- keep alive - 緩存 -->
+  <h4>keep alive</h4>
+  <div class="d-flex mb-2">
+    <button type="button" v-for="tab in outertabs" class="btn btn-secondary mx-2" :key="tab"
+      @click="nowTab = tab">{{tab}}</button>
+  </div>
+  <keep-alive>
+    <component :is="componentBuild2"></component>
+  </keep-alive>
+  <hr>
+  <!-- 異步組件 -->
+  <h4>異步組件</h4>
+  <async-example></async-example>
+</div>
+
+
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script>
+    Vue.component('block-part1', {
+      template: `<div>part1 block</div>`,
+    })
+    Vue.component('block-part2', {
+      template: `<div>part2 block</div>`,
+    })
+    Vue.component('block-part3', {
+      template: `<div>part3 block</div>`,
+    })
+    Vue.component('block-outer1', {
+      template: `<div class="d-flex">
+          <div class="p-3 br-1">
+            <p v-for="info in infos" @click="nowInner = info">{{info.tab}}</p>
+          </div>
+          <div class="p-3">
+            <p v-if="nowInner">{{nowInner.txt}}</p>
+            <p v-else>pls click left side txt</p>
+          </div>
+        </div>`,
+      data() {
+        return {
+          infos: [{
+              tab: 'inner1',
+              txt: 'Hey Hey Hey'
+            },
+            {
+              tab: 'inner2',
+              txt: 'want ur 120%'
+            },
+          ],
+          nowInner: null,
+        }
+      },
+    })
+    Vue.component('block-outer2', {
+      template: `<div class="p-3">outer2 block</div>`,
+    })
+
+    // 異步組件
+    //待看
+    Vue.component('async-example', function (resolve, reject) {
+      setTimeout(function () {
+        resolve({
+          template: `<div>hey<div>`,
+        })
+      }, 1000);
+      //一秒後畫面會渲染該組件
+      //Vue 只有在这个组件需要被渲染的时候才会触发该工厂函数，且会把结果缓存起来供未来重渲染
+    })
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        tabs: ['part1', 'part2', 'part3'],
+        outertabs: ['outer1', 'outer2'],
+        currentPart: 'part1',
+        nowTab: 'outer1',
+      },
+      computed: {
+        componentBuild() {
+          return 'block-' + this.currentPart;
+        },
+        componentBuild2() {
+          return 'block-' + this.nowTab;
+        }
+      },
+    });
+  </script>
+</body>
+
+</html>
